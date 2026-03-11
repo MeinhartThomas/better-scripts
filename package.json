@@ -1,0 +1,83 @@
+{
+  "name": "better-scripts",
+  "displayName": "Better Scripts",
+  "description": "A beautiful replacement for the built-in npm scripts sidebar — supports npm, pnpm, bun, and yarn with auto-detection, rich icons, and one-click run/debug.",
+  "version": "0.1.0",
+  "publisher": "better-scripts",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/package.json"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "betterScripts",
+          "name": "Better Scripts"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "betterScripts.runScript",
+        "title": "Run Script",
+        "icon": "$(play)"
+      },
+      {
+        "command": "betterScripts.debugScript",
+        "title": "Debug Script",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "betterScripts.openScript",
+        "title": "Open in package.json",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "betterScripts.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "betterScripts.openScript",
+          "when": "viewItem == script",
+          "group": "inline@1"
+        },
+        {
+          "command": "betterScripts.debugScript",
+          "when": "viewItem == script",
+          "group": "inline@2"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "betterScripts.refresh",
+          "when": "view == betterScripts",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "dev": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "package": "bun run build && npx @vscode/vsce package --no-dependencies",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0"
+  }
+}
