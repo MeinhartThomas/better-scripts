@@ -4,8 +4,6 @@
 
 A VS Code extension that replaces the built-in npm scripts sidebar with a richer, more capable alternative.
 
-![Better Scripts](./screenshot/screenshot.png)
-
 ## Features
 
 - **Auto-detects your package manager** -- supports npm, pnpm, bun, and yarn out of the box. Detection is based on lockfiles (`bun.lockb`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`) and the `packageManager` field in `package.json`.
@@ -15,6 +13,8 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 - **Contextual icons** -- each script gets an icon based on what it does: test, build, lint, format, Docker, Prisma, Playwright, i18n, deploy, TypeScript, Storybook, and more. Falls back to your package manager's icon.
 - **Multi-root support** -- automatically discovers and groups scripts from every `package.json` in your workspace (excluding `node_modules`).
 - **Live updates** -- the tree refreshes automatically when any `package.json` changes.
+
+<img src="./screenshot/screenshot.png" width="600" />
 
 ## Package Manager Detection
 
