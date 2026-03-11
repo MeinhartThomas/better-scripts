@@ -14,7 +14,7 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 - **Multi-root support** -- automatically discovers and groups scripts from every `package.json` in your workspace (excluding `node_modules`).
 - **Live updates** -- the tree refreshes automatically when any `package.json` changes.
 
-<img src="./screenshot/screenshot.png" width="600" />
+<img src="./screenshot/screenshot.png" width="500" />
 
 ## Package Manager Detection
 
