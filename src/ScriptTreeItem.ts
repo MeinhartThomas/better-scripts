@@ -13,10 +13,26 @@ export class PackageJsonTreeItem extends vscode.TreeItem {
   ) {
     super(relativePath, vscode.TreeItemCollapsibleState.Expanded);
     this.contextValue = "packageJson";
+
+    const pmIconName =
+      packageManager === "pnpm" ? "pnpm-light" : packageManager;
     const pmIcon = vscode.Uri.file(
-      path.join(extensionPath, "icons", `${packageManager}.svg`),
+      path.join(extensionPath, "icons", `${pmIconName}.svg`),
     );
-    this.iconPath = { light: pmIcon, dark: pmIcon };
+
+    if (packageManager === "pnpm") {
+      this.iconPath = {
+        light: vscode.Uri.file(
+          path.join(extensionPath, "icons", "pnpm-light.svg"),
+        ),
+        dark: vscode.Uri.file(
+          path.join(extensionPath, "icons", "pnpm-dark.svg"),
+        ),
+      };
+    } else {
+      this.iconPath = { light: pmIcon, dark: pmIcon };
+    }
+
     this.tooltip = packageJsonUri.fsPath;
     this.command = {
       command: "betterScripts.openPackageJson",
@@ -29,14 +45,13 @@ export class PackageJsonTreeItem extends vscode.TreeItem {
 export class ScriptTreeItem extends vscode.TreeItem {
   constructor(
     public readonly script: ScriptEntry,
-    public readonly packageManager: PackageManager,
     extensionPath: string,
   ) {
     super(script.name, vscode.TreeItemCollapsibleState.None);
 
     this.contextValue = "script";
-    this.tooltip = `${packageManager} run ${script.name}\n${script.command}`;
-    this.description = `   ${script.command}`;
+    this.tooltip = `${script.packageManager} run ${script.name}\n${script.command}`;
+    this.description = script.command;
 
     this.iconPath = getIconPath(extensionPath, script.name, script.command);
 

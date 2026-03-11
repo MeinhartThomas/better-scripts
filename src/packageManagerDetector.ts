@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
 
 export type PackageManager = "bun" | "pnpm" | "yarn" | "npm";
 
@@ -12,43 +11,64 @@ const LOCKFILE_MAP: [string, PackageManager][] = [
   ["package-lock.json", "npm"],
 ];
 
-function parsePackageManagerField(
-  packageJsonPath: string,
-): PackageManager | undefined {
+const VALID_PMS = new Set<string>(["bun", "pnpm", "yarn", "npm"]);
+
+async function parsePackageManagerField(
+  packageJsonUri: vscode.Uri,
+): Promise<PackageManager | undefined> {
   try {
-    const content = fs.readFileSync(packageJsonPath, "utf-8");
-    const pkg = JSON.parse(content);
+    const raw = await vscode.workspace.fs.readFile(packageJsonUri);
+    const pkg = JSON.parse(Buffer.from(raw).toString("utf-8"));
     if (typeof pkg.packageManager === "string") {
       const name = pkg.packageManager.split("@")[0];
-      if (["bun", "pnpm", "yarn", "npm"].includes(name)) {
+      if (VALID_PMS.has(name)) {
         return name as PackageManager;
       }
     }
   } catch {
-    // ignore parse errors
+    // ignore
   }
   return undefined;
 }
 
-export async function detectPackageManager(
-  workspaceFolder: vscode.WorkspaceFolder,
-): Promise<PackageManager> {
-  const root = workspaceFolder.uri.fsPath;
-
-  for (const [lockfile, pm] of LOCKFILE_MAP) {
-    const lockPath = path.join(root, lockfile);
-    try {
-      await vscode.workspace.fs.stat(vscode.Uri.file(lockPath));
-      return pm;
-    } catch {
-      // file doesn't exist, continue
-    }
+async function fileExists(uri: vscode.Uri): Promise<boolean> {
+  try {
+    await vscode.workspace.fs.stat(uri);
+    return true;
+  } catch {
+    return false;
   }
+}
 
-  const rootPkgJson = path.join(root, "package.json");
-  const fromField = parsePackageManagerField(rootPkgJson);
-  if (fromField) {
-    return fromField;
+/**
+ * Detect the package manager for a specific package.json by walking up from
+ * its directory to the workspace root, checking for lockfiles and the
+ * `packageManager` field at each level.
+ */
+export async function detectPackageManagerForPath(
+  packageJsonUri: vscode.Uri,
+): Promise<PackageManager> {
+  const folder = vscode.workspace.getWorkspaceFolder(packageJsonUri);
+  const rootPath = folder?.uri.fsPath;
+  let dir = path.dirname(packageJsonUri.fsPath);
+
+  while (true) {
+    for (const [lockfile, pm] of LOCKFILE_MAP) {
+      if (await fileExists(vscode.Uri.file(path.join(dir, lockfile)))) {
+        return pm;
+      }
+    }
+
+    const pkgJsonUri = vscode.Uri.file(path.join(dir, "package.json"));
+    const fromField = await parsePackageManagerField(pkgJsonUri);
+    if (fromField) {
+      return fromField;
+    }
+
+    if (!rootPath || dir === rootPath || dir === path.dirname(dir)) {
+      break;
+    }
+    dir = path.dirname(dir);
   }
 
   return "npm";

@@ -3,7 +3,6 @@ import {
   findAllPackageJsons,
   type PackageJsonEntry,
 } from "./packageJsonParser";
-import type { PackageManager } from "./packageManagerDetector";
 import { PackageJsonTreeItem, ScriptTreeItem } from "./ScriptTreeItem";
 
 type TreeElement = PackageJsonTreeItem | ScriptTreeItem;
@@ -15,15 +14,10 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   private packageJsonEntries: PackageJsonEntry[] = [];
-  private packageManager: PackageManager = "npm";
   private extensionPath: string;
 
   constructor(extensionPath: string) {
     this.extensionPath = extensionPath;
-  }
-
-  setPackageManager(pm: PackageManager): void {
-    this.packageManager = pm;
   }
 
   async refresh(): Promise<void> {
@@ -45,7 +39,7 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
           new PackageJsonTreeItem(
             entry.relativePath,
             entry.uri,
-            this.packageManager,
+            entry.packageManager,
             this.extensionPath,
           ),
       );
@@ -59,7 +53,7 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
         return [];
       }
       return entry.scripts.map(
-        (s) => new ScriptTreeItem(s, this.packageManager, this.extensionPath),
+        (s) => new ScriptTreeItem(s, this.extensionPath),
       );
     }
 

@@ -1,10 +1,6 @@
 import * as vscode from "vscode";
 import { ScriptTreeProvider } from "./ScriptTreeProvider";
 import { PackageJsonTreeItem, ScriptTreeItem } from "./ScriptTreeItem";
-import {
-  detectPackageManager,
-  type PackageManager,
-} from "./packageManagerDetector";
 import { createPackageJsonWatcher } from "./packageJsonParser";
 import {
   runScript,
@@ -12,19 +8,18 @@ import {
   openScriptInPackageJson,
 } from "./scriptRunner";
 
-let treeProvider: ScriptTreeProvider;
-let detectedPm: PackageManager = "npm";
+function debounce(fn: () => void, ms: number): () => void {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return () => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(fn, ms);
+  };
+}
 
 export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<void> {
-  treeProvider = new ScriptTreeProvider(context.extensionPath);
-
-  const folders = vscode.workspace.workspaceFolders;
-  if (folders && folders.length > 0) {
-    detectedPm = await detectPackageManager(folders[0]);
-    treeProvider.setPackageManager(detectedPm);
-  }
+  const treeProvider = new ScriptTreeProvider(context.extensionPath);
 
   const treeView = vscode.window.createTreeView("betterScripts", {
     treeDataProvider: treeProvider,
@@ -34,7 +29,8 @@ export async function activate(
 
   await treeProvider.refresh();
 
-  const watcher = createPackageJsonWatcher(() => treeProvider.refresh());
+  const debouncedRefresh = debounce(() => treeProvider.refresh(), 300);
+  const watcher = createPackageJsonWatcher(() => debouncedRefresh());
   context.subscriptions.push(watcher);
 
   context.subscriptions.push(
@@ -42,7 +38,7 @@ export async function activate(
       "betterScripts.runScript",
       (item: ScriptTreeItem) => {
         if (item instanceof ScriptTreeItem) {
-          runScript(item, detectedPm);
+          runScript(item);
         }
       },
     ),
@@ -53,7 +49,7 @@ export async function activate(
       "betterScripts.debugScript",
       (item: ScriptTreeItem) => {
         if (item instanceof ScriptTreeItem) {
-          debugScript(item, detectedPm);
+          debugScript(item);
         }
       },
     ),

@@ -9,10 +9,12 @@
     "type": "git",
     "url": "https://github.com/better-scripts/better-scripts"
   },
+  "icon": "icons/extension-icon.png",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
+    "Programming Languages",
     "Other"
   ],
   "activationEvents": [
@@ -20,6 +22,24 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Better Scripts",
+      "properties": {
+        "betterScripts.terminalBehavior": {
+          "type": "string",
+          "enum": [
+            "reuse",
+            "newTerminal"
+          ],
+          "default": "reuse",
+          "enumDescriptions": [
+            "Reuse an existing terminal for the same script",
+            "Always create a new terminal"
+          ],
+          "description": "Controls whether to reuse an existing terminal or create a new one when running scripts."
+        }
+      }
+    },
     "views": {
       "explorer": [
         {
@@ -86,8 +106,9 @@
     "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
     "dev": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "package": "bun run build && npx @vscode/vsce package --no-dependencies",
-    "install:vscode": "bun run package && code --install-extension better-scripts-0.1.0.vsix",
-    "install:cursor": "bun run package && cursor --install-extension better-scripts-0.1.0.vsix",
+    "install:vscode": "bun run package && code --install-extension $(ls *.vsix | head -1)",
+    "install:cursor": "bun run package && cursor --install-extension $(ls *.vsix | head -1)",
+    "test": "vitest run",
     "lint": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -97,6 +118,7 @@
     "@types/vscode": "^1.85.0",
     "esbuild": "^0.24.0",
     "prettier": "^3.8.1",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.18"
   }
 }

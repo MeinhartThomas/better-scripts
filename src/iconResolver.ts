@@ -170,7 +170,7 @@ const RULES: IconRule[] = [
   {
     icon: "watch",
     namePatterns: ["watch"],
-    commandPatterns: ["--watch", "nodemon", "chokidar"],
+    commandPatterns: ["--watch", "chokidar"],
   },
   {
     icon: "preview",
@@ -263,7 +263,7 @@ export function getIconPath(
     "supabase",
     "astro",
     "drizzle",
-    "astro",
+    "storybook",
   ];
   if (singleFileIcons.includes(iconName)) {
     const icon = vscode.Uri.file(
