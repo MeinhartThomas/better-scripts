@@ -6,7 +6,7 @@ import type { ScriptTreeItem } from "./ScriptTreeItem";
 
 export function runScript(
   item: ScriptTreeItem,
-  packageManager: PackageManager
+  packageManager: PackageManager,
 ): void {
   const cwd = path.dirname(item.script.packageJsonUri.fsPath);
   const cmd = `${packageManager} run ${item.script.name}`;
@@ -21,11 +21,11 @@ export function runScript(
 
 export async function debugScript(
   item: ScriptTreeItem,
-  packageManager: PackageManager
+  packageManager: PackageManager,
 ): Promise<void> {
   const cwd = path.dirname(item.script.packageJsonUri.fsPath);
   const folder = vscode.workspace.getWorkspaceFolder(
-    item.script.packageJsonUri
+    item.script.packageJsonUri,
   );
 
   let runtimeArgs: string[];
@@ -65,14 +65,12 @@ export async function debugScript(
 }
 
 export async function openScriptInPackageJson(
-  item: ScriptTreeItem
+  item: ScriptTreeItem,
 ): Promise<void> {
   const uri = item.script.packageJsonUri;
   const content = fs.readFileSync(uri.fsPath, "utf-8");
 
-  const scriptPattern = new RegExp(
-    `"${escapeRegex(item.script.name)}"\\s*:`
-  );
+  const scriptPattern = new RegExp(`"${escapeRegex(item.script.name)}"\\s*:`);
   const lines = content.split("\n");
   let lineIndex = 0;
 
@@ -85,7 +83,12 @@ export async function openScriptInPackageJson(
 
   const doc = await vscode.workspace.openTextDocument(uri);
   const editor = await vscode.window.showTextDocument(doc);
-  const range = new vscode.Range(lineIndex, 0, lineIndex, lines[lineIndex].length);
+  const range = new vscode.Range(
+    lineIndex,
+    0,
+    lineIndex,
+    lines[lineIndex].length,
+  );
   editor.selection = new vscode.Selection(range.start, range.end);
   editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
 }

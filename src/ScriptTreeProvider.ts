@@ -40,28 +40,26 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
       if (this.packageJsonEntries.length === 0) {
         return [];
       }
-      if (this.packageJsonEntries.length === 1) {
-        const entry = this.packageJsonEntries[0];
-        return entry.scripts.map(
-          (s) =>
-            new ScriptTreeItem(s, this.packageManager, this.extensionPath)
-        );
-      }
       return this.packageJsonEntries.map(
-        (entry) => new PackageJsonTreeItem(entry.relativePath, entry.uri)
+        (entry) =>
+          new PackageJsonTreeItem(
+            entry.relativePath,
+            entry.uri,
+            this.packageManager,
+            this.extensionPath,
+          ),
       );
     }
 
     if (element instanceof PackageJsonTreeItem) {
       const entry = this.packageJsonEntries.find(
-        (e) => e.uri.fsPath === element.packageJsonUri.fsPath
+        (e) => e.uri.fsPath === element.packageJsonUri.fsPath,
       );
       if (!entry) {
         return [];
       }
       return entry.scripts.map(
-        (s) =>
-          new ScriptTreeItem(s, this.packageManager, this.extensionPath)
+        (s) => new ScriptTreeItem(s, this.packageManager, this.extensionPath),
       );
     }
 

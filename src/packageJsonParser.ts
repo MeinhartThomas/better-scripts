@@ -18,7 +18,7 @@ export interface PackageJsonEntry {
 export async function findAllPackageJsons(): Promise<PackageJsonEntry[]> {
   const files = await vscode.workspace.findFiles(
     "**/package.json",
-    "**/node_modules/**"
+    "**/node_modules/**",
   );
 
   const entries: PackageJsonEntry[] = [];
@@ -35,7 +35,7 @@ export async function findAllPackageJsons(): Promise<PackageJsonEntry[]> {
 }
 
 export async function parsePackageJson(
-  uri: vscode.Uri
+  uri: vscode.Uri,
 ): Promise<PackageJsonEntry | undefined> {
   try {
     const content = fs.readFileSync(uri.fsPath, "utf-8");
@@ -52,7 +52,7 @@ export async function parsePackageJson(
         command: command as string,
         packageJsonUri: uri,
         relativePath,
-      })
+      }),
     );
 
     return { uri, relativePath, scripts: scriptEntries };
@@ -71,13 +71,13 @@ function getRelativePath(uri: vscode.Uri): string {
 }
 
 export function createPackageJsonWatcher(
-  onChanged: () => void
+  onChanged: () => void,
 ): vscode.FileSystemWatcher {
   const watcher = vscode.workspace.createFileSystemWatcher(
     "**/package.json",
     false,
     false,
-    false
+    false,
   );
 
   watcher.onDidChange(onChanged);

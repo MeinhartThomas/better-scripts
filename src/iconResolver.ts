@@ -1,6 +1,5 @@
 import * as path from "path";
 import * as vscode from "vscode";
-import type { PackageManager } from "./packageManagerDetector";
 
 type IconName =
   | "dev"
@@ -8,7 +7,10 @@ type IconName =
   | "test"
   | "lint"
   | "eslint"
+  | "prettier"
   | "format"
+  | "vitest"
+  | "jest"
   | "docker"
   | "prisma"
   | "playwright"
@@ -16,6 +18,15 @@ type IconName =
   | "deploy"
   | "typescript"
   | "storybook"
+  | "turborepo"
+  | "graphql"
+  | "tailwind"
+  | "stripe"
+  | "supabase"
+  | "astro"
+  | "expo"
+  | "drizzle"
+  | "sentry"
   | "clean"
   | "watch"
   | "preview"
@@ -52,14 +63,69 @@ const RULES: IconRule[] = [
     commandPatterns: ["storybook", "sb "],
   },
   {
+    icon: "turborepo",
+    namePatterns: ["turbo"],
+    commandPatterns: ["turbo run", "turbo "],
+  },
+  {
+    icon: "graphql",
+    namePatterns: ["graphql", "codegen", "gql"],
+    commandPatterns: ["graphql-codegen", "graphql", "gql-gen"],
+  },
+  {
+    icon: "tailwind",
+    namePatterns: ["tailwind"],
+    commandPatterns: ["tailwindcss", "tailwind"],
+  },
+  {
+    icon: "stripe",
+    namePatterns: ["stripe"],
+    commandPatterns: ["stripe"],
+  },
+  {
+    icon: "supabase",
+    namePatterns: ["supabase"],
+    commandPatterns: ["supabase"],
+  },
+  {
+    icon: "astro",
+    namePatterns: ["astro"],
+    commandPatterns: ["astro"],
+  },
+  {
+    icon: "expo",
+    namePatterns: ["expo"],
+    commandPatterns: ["expo"],
+  },
+  {
+    icon: "drizzle",
+    namePatterns: ["drizzle"],
+    commandPatterns: ["drizzle-kit", "drizzle"],
+  },
+  {
+    icon: "sentry",
+    namePatterns: ["sentry"],
+    commandPatterns: ["sentry-cli", "sentry"],
+  },
+  {
     icon: "typescript",
     namePatterns: ["typecheck", "type-check", "tsc"],
     commandPatterns: ["tsc"],
   },
   {
+    icon: "vitest",
+    namePatterns: ["vitest"],
+    commandPatterns: ["vitest"],
+  },
+  {
+    icon: "jest",
+    namePatterns: ["jest"],
+    commandPatterns: ["jest"],
+  },
+  {
     icon: "test",
     namePatterns: ["test", "spec", "coverage"],
-    commandPatterns: ["vitest", "jest", "mocha", "ava", "tap", "nyc"],
+    commandPatterns: ["mocha", "ava", "tap", "nyc"],
   },
   {
     icon: "eslint",
@@ -72,9 +138,14 @@ const RULES: IconRule[] = [
     commandPatterns: ["oxlint", "biome check", "biome lint"],
   },
   {
+    icon: "prettier",
+    namePatterns: ["prettier"],
+    commandPatterns: ["prettier"],
+  },
+  {
     icon: "format",
-    namePatterns: ["format", "prettier", "fmt"],
-    commandPatterns: ["prettier", "biome format", "dprint"],
+    namePatterns: ["format", "fmt"],
+    commandPatterns: ["biome format", "dprint"],
   },
   {
     icon: "i18n",
@@ -84,7 +155,7 @@ const RULES: IconRule[] = [
   {
     icon: "database",
     namePatterns: ["db", "migrate", "migration", "seed", "schema"],
-    commandPatterns: ["knex", "typeorm", "drizzle", "sequelize", "migrate"],
+    commandPatterns: ["knex", "typeorm", "sequelize", "migrate"],
   },
   {
     icon: "deploy",
@@ -119,7 +190,6 @@ const RULES: IconRule[] = [
       "tsc -b",
       "tsup",
       "unbuild",
-      "turbo build",
     ],
   },
   {
@@ -144,7 +214,7 @@ function matchesAny(value: string, patterns: string[]): boolean {
 
 export function resolveIconName(
   scriptName: string,
-  scriptCommand: string
+  scriptCommand: string,
 ): IconName {
   const name = scriptName.toLowerCase();
   const cmd = scriptCommand.toLowerCase();
@@ -165,31 +235,49 @@ export function getIconPath(
   extensionPath: string,
   scriptName: string,
   scriptCommand: string,
-  packageManager: PackageManager
 ): { light: vscode.Uri; dark: vscode.Uri } {
   const iconName = resolveIconName(scriptName, scriptCommand);
 
   if (iconName === "default") {
-    const pmIcon = vscode.Uri.file(
-      path.join(extensionPath, "icons", `${packageManager}.svg`)
-    );
-    return { light: pmIcon, dark: pmIcon };
+    return {
+      light: vscode.Uri.file(
+        path.join(extensionPath, "icons", "default-light.svg"),
+      ),
+      dark: vscode.Uri.file(
+        path.join(extensionPath, "icons", "default-dark.svg"),
+      ),
+    };
   }
 
-  const singleFileIcons: IconName[] = ["eslint", "playwright"];
+  const singleFileIcons: IconName[] = [
+    "eslint",
+    "playwright",
+    "typescript",
+    "prettier",
+    "vitest",
+    "jest",
+    "turborepo",
+    "graphql",
+    "tailwind",
+    "stripe",
+    "supabase",
+    "astro",
+    "drizzle",
+    "astro",
+  ];
   if (singleFileIcons.includes(iconName)) {
     const icon = vscode.Uri.file(
-      path.join(extensionPath, "icons", `${iconName}.svg`)
+      path.join(extensionPath, "icons", `${iconName}.svg`),
     );
     return { light: icon, dark: icon };
   }
 
   return {
     light: vscode.Uri.file(
-      path.join(extensionPath, "icons", `${iconName}-light.svg`)
+      path.join(extensionPath, "icons", `${iconName}-light.svg`),
     ),
     dark: vscode.Uri.file(
-      path.join(extensionPath, "icons", `${iconName}-dark.svg`)
+      path.join(extensionPath, "icons", `${iconName}-dark.svg`),
     ),
   };
 }

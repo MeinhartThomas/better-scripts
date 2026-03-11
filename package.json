@@ -45,6 +45,11 @@
         "icon": "$(go-to-file)"
       },
       {
+        "command": "betterScripts.openPackageJson",
+        "title": "Open package.json",
+        "icon": "$(go-to-file)"
+      },
+      {
         "command": "betterScripts.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
@@ -52,6 +57,11 @@
     ],
     "menus": {
       "view/item/context": [
+        {
+          "command": "betterScripts.openPackageJson",
+          "when": "viewItem == packageJson",
+          "group": "inline@1"
+        },
         {
           "command": "betterScripts.openScript",
           "when": "viewItem == script",

@@ -1,15 +1,22 @@
 import * as vscode from "vscode";
 import { ScriptTreeProvider } from "./ScriptTreeProvider";
-import { ScriptTreeItem } from "./ScriptTreeItem";
-import { detectPackageManager, type PackageManager } from "./packageManagerDetector";
+import { PackageJsonTreeItem, ScriptTreeItem } from "./ScriptTreeItem";
+import {
+  detectPackageManager,
+  type PackageManager,
+} from "./packageManagerDetector";
 import { createPackageJsonWatcher } from "./packageJsonParser";
-import { runScript, debugScript, openScriptInPackageJson } from "./scriptRunner";
+import {
+  runScript,
+  debugScript,
+  openScriptInPackageJson,
+} from "./scriptRunner";
 
 let treeProvider: ScriptTreeProvider;
 let detectedPm: PackageManager = "npm";
 
 export async function activate(
-  context: vscode.ExtensionContext
+  context: vscode.ExtensionContext,
 ): Promise<void> {
   treeProvider = new ScriptTreeProvider(context.extensionPath);
 
@@ -37,8 +44,8 @@ export async function activate(
         if (item instanceof ScriptTreeItem) {
           runScript(item, detectedPm);
         }
-      }
-    )
+      },
+    ),
   );
 
   context.subscriptions.push(
@@ -48,8 +55,8 @@ export async function activate(
         if (item instanceof ScriptTreeItem) {
           debugScript(item, detectedPm);
         }
-      }
-    )
+      },
+    ),
   );
 
   context.subscriptions.push(
@@ -59,14 +66,25 @@ export async function activate(
         if (item instanceof ScriptTreeItem) {
           openScriptInPackageJson(item);
         }
-      }
-    )
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.openPackageJson",
+      (item: PackageJsonTreeItem) => {
+        if (item instanceof PackageJsonTreeItem) {
+          vscode.window.showTextDocument(item.packageJsonUri);
+        }
+      },
+    ),
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("betterScripts.refresh", () => {
       treeProvider.refresh();
-    })
+    }),
   );
 }
 

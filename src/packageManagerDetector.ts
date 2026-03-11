@@ -13,7 +13,7 @@ const LOCKFILE_MAP: [string, PackageManager][] = [
 ];
 
 function parsePackageManagerField(
-  packageJsonPath: string
+  packageJsonPath: string,
 ): PackageManager | undefined {
   try {
     const content = fs.readFileSync(packageJsonPath, "utf-8");
@@ -31,7 +31,7 @@ function parsePackageManagerField(
 }
 
 export async function detectPackageManager(
-  workspaceFolder: vscode.WorkspaceFolder
+  workspaceFolder: vscode.WorkspaceFolder,
 ): Promise<PackageManager> {
   const root = workspaceFolder.uri.fsPath;
 

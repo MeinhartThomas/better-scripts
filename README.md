@@ -21,12 +21,12 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 
 ## Commands
 
-| Command | Description |
-|---|---|
-| `Better Scripts: Run Script` | Run the selected script in a terminal |
-| `Better Scripts: Debug Script` | Run the script with Node.js debugger attached |
-| `Better Scripts: Open in package.json` | Jump to the script definition |
-| `Better Scripts: Refresh` | Manually refresh the script list |
+| Command                                | Description                                   |
+| -------------------------------------- | --------------------------------------------- |
+| `Better Scripts: Run Script`           | Run the selected script in a terminal         |
+| `Better Scripts: Debug Script`         | Run the script with Node.js debugger attached |
+| `Better Scripts: Open in package.json` | Jump to the script definition                 |
+| `Better Scripts: Refresh`              | Manually refresh the script list              |
 
 ## Package Manager Detection
 
