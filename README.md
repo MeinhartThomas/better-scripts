@@ -1,8 +1,6 @@
-<p align="center">
-  <img src="./icons/extension-icon.png" width="96" alt="Better Scripts icon" />
-</p>
-
 # Better Scripts
+
+<img src="./icons/extension-icon.png" height="96" width="96" />
 
 A VS Code extension that replaces the built-in npm scripts sidebar with a richer, more capable alternative.
 
