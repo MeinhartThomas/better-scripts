@@ -21,7 +21,6 @@ type IconName =
   | "turborepo"
   | "graphql"
   | "tailwind"
-  | "stripe"
   | "supabase"
   | "astro"
   | "expo"
@@ -76,11 +75,6 @@ const RULES: IconRule[] = [
     icon: "tailwind",
     namePatterns: ["tailwind"],
     commandPatterns: ["tailwindcss", "tailwind"],
-  },
-  {
-    icon: "stripe",
-    namePatterns: ["stripe"],
-    commandPatterns: ["stripe"],
   },
   {
     icon: "supabase",
@@ -250,6 +244,7 @@ export function getIconPath(
   }
 
   const singleFileIcons: IconName[] = [
+    "docker",
     "eslint",
     "playwright",
     "typescript",
@@ -259,7 +254,6 @@ export function getIconPath(
     "turborepo",
     "graphql",
     "tailwind",
-    "stripe",
     "supabase",
     "astro",
     "drizzle",

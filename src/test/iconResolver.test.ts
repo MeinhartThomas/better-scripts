@@ -14,7 +14,6 @@ describe("resolveIconName", () => {
       ["graphql", "graphql-codegen", "graphql"],
       ["codegen", "gql-gen", "graphql"],
       ["tailwind", "tailwindcss -i input.css", "tailwind"],
-      ["stripe", "stripe listen", "stripe"],
       ["supabase", "supabase start", "supabase"],
       ["astro", "astro dev", "astro"],
       ["expo", "expo start", "expo"],
