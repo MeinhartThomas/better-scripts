@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "publisher": "better-scripts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/better-scripts/better-scripts"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -72,6 +76,8 @@
     "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
     "dev": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "package": "bun run build && npx @vscode/vsce package --no-dependencies",
+    "install:vscode": "bun run package && code --install-extension better-scripts-0.1.0.vsix",
+    "install:cursor": "bun run package && cursor --install-extension better-scripts-0.1.0.vsix",
     "lint": "tsc --noEmit"
   },
   "devDependencies": {
