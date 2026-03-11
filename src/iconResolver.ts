@@ -248,16 +248,15 @@ export function getIconPath(
     "eslint",
     "playwright",
     "typescript",
-    "prettier",
     "vitest",
     "jest",
     "turborepo",
     "graphql",
     "tailwind",
     "supabase",
-    "astro",
     "drizzle",
     "storybook",
+    "sentry",
   ];
   if (singleFileIcons.includes(iconName)) {
     const icon = vscode.Uri.file(

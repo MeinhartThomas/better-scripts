@@ -1,16 +1,5 @@
-<svg
-  viewBox="0 0 512 512"
-  xmlns="http://www.w3.org/2000/svg"
-  fill-rule="evenodd"
-  clip-rule="evenodd"
-  stroke-linejoin="round"
-  stroke-miterlimit="2"
->
-  <g fill-rule="nonzero">
-    <path d="M10.999 500.999v-490h490v490h-490z" fill="#c12127" />
-    <path
-      d="M102.874 102.874h306.25v306.25h-61.25v-245h-91.875v245H102.874v-306.25z"
-      fill="#fff"
-    />
-  </g>
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <title>file_type_npm</title>
+  <path d="M2 2H30V30H2" fill="#c12127" />
+  <path d="M7.25 7.25h17.5v17.5h-3.5v-14H16v14H7.25" fill="#fff" />
 </svg>

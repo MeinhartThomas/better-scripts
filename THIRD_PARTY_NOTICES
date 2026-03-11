@@ -4,7 +4,51 @@ This project incorporates material from the projects listed below.
 
 ================================================================================
 
-1. Lucide Icons (https://lucide.dev/)
+1. vscode-icons (https://github.com/vscode-icons/vscode-icons)
+
+   License: MIT License
+   Copyright (c) 2016 Roberto Huertas
+
+   The following icons are sourced from the vscode-icons project:
+   - icons/astro-dark.svg, icons/astro-light.svg (file_type_astro, file_type_light_astro)
+   - icons/bun.svg (file_type_bun)
+   - icons/docker.svg (file_type_docker)
+   - icons/eslint.svg (file_type_eslint)
+   - icons/expo-dark.svg, icons/expo-light.svg (file_type_expo, file_type_light_expo)
+   - icons/graphql.svg (file_type_graphql)
+   - icons/jest.svg (file_type_jest)
+   - icons/npm.svg (file_type_npm)
+   - icons/playwright.svg (file_type_playwright)
+   - icons/pnpm-dark.svg, icons/pnpm-light.svg (file_type_pnpm, file_type_light_pnpm)
+   - icons/prettier-dark.svg, icons/prettier-light.svg (file_type_prettier, file_type_light_prettier)
+   - icons/prisma-dark.svg, icons/prisma-light.svg (file_type_prisma, file_type_light_prisma)
+   - icons/sentry.svg (file_type_sentry)
+   - icons/storybook.svg (file_type_storybook)
+   - icons/tailwind.svg (file_type_tailwind)
+   - icons/turborepo.svg (file_type_light_turbo)
+   - icons/vitest.svg (file_type_light_vitest)
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+================================================================================
+
+2. Lucide Icons (https://lucide.dev/)
 
    License: ISC License
    Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022
@@ -39,40 +83,7 @@ This project incorporates material from the projects listed below.
 
 ================================================================================
 
-2. Simple Icons (https://simpleicons.org/)
-
-   License: CC0 1.0 Universal (Public Domain Dedication)
-
-   Several brand icons in this project are derived from Simple Icons.
-
-   No copyright. The person who associated a work with this deed has
-   dedicated the work to the public domain by waiving all of his or her
-   rights to the work worldwide under copyright law, including all related
-   and neighboring rights, to the extent allowed by law.
-
-================================================================================
-
-3. Docker (https://www.docker.com/)
-
-   Icon: icons/docker.svg
-
-   The Docker logo is a trademark of Docker, Inc. Used here under
-   Docker's trademark guidelines for open-source projects.
-   https://www.docker.com/legal/trademark-guidelines/
-
-================================================================================
-
-4. npm (https://www.npmjs.com/)
-
-   Icon: icons/npm.svg
-
-   The npm logo is a trademark of npm, Inc. Used here under npm's
-   trademark policy.
-   https://docs.npmjs.com/policies/logos-and-usage
-
-================================================================================
-
-5. Yarn (https://yarnpkg.com/)
+3. Yarn (https://yarnpkg.com/)
 
    Icon: icons/yarn.svg
 
@@ -82,27 +93,7 @@ This project incorporates material from the projects listed below.
 
 ================================================================================
 
-6. pnpm (https://pnpm.io/)
-
-   Icons: icons/pnpm-dark.svg, icons/pnpm-light.svg
-
-   Copyright (c) pnpm contributors
-   License: MIT
-   https://github.com/pnpm/pnpm
-
-================================================================================
-
-7. Bun (https://bun.sh/)
-
-   Icon: icons/bun.svg
-
-   Copyright (c) Oven-sh
-   License: MIT
-   https://github.com/oven-sh/bun
-
-================================================================================
-
-8. TypeScript (https://www.typescriptlang.org/)
+4. TypeScript (https://www.typescriptlang.org/)
 
    Icon: icons/typescript.svg
 
@@ -114,155 +105,22 @@ This project incorporates material from the projects listed below.
 
 ================================================================================
 
-9. ESLint (https://eslint.org/)
+5. Supabase (https://supabase.com/)
 
-   Icon: icons/eslint.svg
+   Icon: icons/supabase.svg
 
-   Copyright OpenJS Foundation and ESLint contributors
-   License: MIT
-   https://github.com/eslint/eslint
-
-================================================================================
-
-10. Prettier (https://prettier.io/)
-
-    Icon: icons/prettier.svg
-
-    Copyright (c) James Long and contributors
-    License: MIT
-    https://github.com/prettier/prettier
+   Copyright (c) Supabase Inc.
+   License: Apache License 2.0
+   https://github.com/supabase/supabase
 
 ================================================================================
 
-11. Vitest (https://vitest.dev/)
+6. Drizzle ORM (https://orm.drizzle.team/)
 
-    Icon: icons/vitest.svg
+   Icon: icons/drizzle.svg
 
-    Copyright (c) Vitest contributors
-    License: MIT
-    https://github.com/vitest-dev/vitest
-
-================================================================================
-
-12. Jest (https://jestjs.io/)
-
-    Icon: icons/jest.svg
-
-    Copyright (c) Meta Platforms, Inc. and affiliates
-    License: MIT
-    https://github.com/jestjs/jest
-
-================================================================================
-
-13. Playwright (https://playwright.dev/)
-
-    Icon: icons/playwright.svg
-
-    Copyright (c) Microsoft Corporation
-    License: Apache License 2.0
-    https://github.com/microsoft/playwright
-
-================================================================================
-
-14. Storybook (https://storybook.js.org/)
-
-    Icon: icons/storybook.svg
-
-    Copyright (c) Storybook contributors
-    License: MIT
-    https://github.com/storybookjs/storybook
-
-================================================================================
-
-15. Turborepo (https://turbo.build/)
-
-    Icon: icons/turborepo.svg
-
-    Copyright (c) Vercel, Inc.
-    License: MIT
-    https://github.com/vercel/turborepo
-
-================================================================================
-
-16. GraphQL (https://graphql.org/)
-
-    Icon: icons/graphql.svg
-
-    Copyright (c) GraphQL contributors
-    License: MIT
-    https://github.com/graphql/graphql-spec
-
-    The GraphQL trademark is managed by the GraphQL Foundation.
-
-================================================================================
-
-17. Tailwind CSS (https://tailwindcss.com/)
-
-    Icon: icons/tailwind.svg
-
-    Copyright (c) Tailwind Labs, Inc.
-    License: MIT
-    https://github.com/tailwindlabs/tailwindcss
-
-================================================================================
-
-18. Supabase (https://supabase.com/)
-
-    Icon: icons/supabase.svg
-
-    Copyright (c) Supabase Inc.
-    License: Apache License 2.0
-    https://github.com/supabase/supabase
-
-================================================================================
-
-19. Astro (https://astro.build/)
-
-    Icon: icons/astro.svg
-
-    Copyright (c) Astro contributors
-    License: MIT
-    https://github.com/withastro/astro
-
-================================================================================
-
-20. Drizzle ORM (https://orm.drizzle.team/)
-
-    Icon: icons/drizzle.svg
-
-    Copyright (c) Drizzle Team
-    License: Apache License 2.0
-    https://github.com/drizzle-team/drizzle-orm
-
-================================================================================
-
-21. Prisma (https://www.prisma.io/)
-
-    Icons: icons/prisma-dark.svg, icons/prisma-light.svg
-
-    Copyright (c) Prisma Data, Inc.
-    License: Apache License 2.0
-    https://github.com/prisma/prisma
-
-================================================================================
-
-22. Sentry (https://sentry.io/)
-
-    Icons: icons/sentry-dark.svg, icons/sentry-light.svg
-
-    Copyright (c) Sentry (Functional Software, Inc.)
-    License: BSL 1.1 (source code), brand assets used per guidelines
-    https://github.com/getsentry/sentry
-    https://sentry.io/branding/
-
-================================================================================
-
-23. Expo (https://expo.dev/)
-
-    Icons: icons/expo-dark.svg, icons/expo-light.svg
-
-    Copyright (c) 650 Industries, Inc. (Expo)
-    License: MIT
-    https://github.com/expo/expo
+   Copyright (c) Drizzle Team
+   License: Apache License 2.0
+   https://github.com/drizzle-team/drizzle-orm
 
 ================================================================================
