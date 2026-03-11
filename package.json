@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/better-scripts/better-scripts"
+    "url": "https://github.com/MeinhartThomas/better-scripts"
   },
   "icon": "icons/extension-icon.png",
   "engines": {
