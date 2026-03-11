@@ -7,6 +7,7 @@ type IconName =
   | "build"
   | "test"
   | "lint"
+  | "eslint"
   | "format"
   | "docker"
   | "prisma"
@@ -61,9 +62,14 @@ const RULES: IconRule[] = [
     commandPatterns: ["vitest", "jest", "mocha", "ava", "tap", "nyc"],
   },
   {
+    icon: "eslint",
+    namePatterns: ["eslint"],
+    commandPatterns: ["eslint"],
+  },
+  {
     icon: "lint",
-    namePatterns: ["lint", "eslint", "oxlint"],
-    commandPatterns: ["eslint", "oxlint", "biome check", "biome lint"],
+    namePatterns: ["lint", "oxlint"],
+    commandPatterns: ["oxlint", "biome check", "biome lint"],
   },
   {
     icon: "format",
@@ -144,13 +150,10 @@ export function resolveIconName(
   const cmd = scriptCommand.toLowerCase();
 
   for (const rule of RULES) {
-    if (matchesAny(name, rule.namePatterns)) {
-      return rule.icon;
-    }
-  }
-
-  for (const rule of RULES) {
-    if (matchesAny(cmd, rule.commandPatterns)) {
+    if (
+      matchesAny(name, rule.namePatterns) ||
+      matchesAny(cmd, rule.commandPatterns)
+    ) {
       return rule.icon;
     }
   }
@@ -171,6 +174,14 @@ export function getIconPath(
       path.join(extensionPath, "icons", `${packageManager}.svg`)
     );
     return { light: pmIcon, dark: pmIcon };
+  }
+
+  const singleFileIcons: IconName[] = ["eslint", "playwright"];
+  if (singleFileIcons.includes(iconName)) {
+    const icon = vscode.Uri.file(
+      path.join(extensionPath, "icons", `${iconName}.svg`)
+    );
+    return { light: icon, dark: icon };
   }
 
   return {
