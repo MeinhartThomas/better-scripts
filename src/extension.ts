@@ -2,11 +2,17 @@ import * as vscode from "vscode";
 import { ScriptTreeProvider } from "./ScriptTreeProvider";
 import { PackageJsonTreeItem, ScriptTreeItem } from "./ScriptTreeItem";
 import { createPackageJsonWatcher } from "./packageJsonParser";
+import type { ScriptEntry } from "./packageJsonParser";
 import {
   runScript,
   debugScript,
   openScriptInPackageJson,
+  runScriptEntry,
+  debugScriptEntry,
+  openScriptEntryInPackageJson,
 } from "./scriptRunner";
+import { FavouritesManager, compositeKey } from "./FavouritesManager";
+import { ScriptWebviewProvider } from "./ScriptWebviewProvider";
 
 function debounce(fn: () => void, ms: number): () => void {
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -19,7 +25,14 @@ function debounce(fn: () => void, ms: number): () => void {
 export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<void> {
-  const treeProvider = new ScriptTreeProvider(context.extensionPath);
+  const favouritesManager = new FavouritesManager(context.workspaceState);
+  context.subscriptions.push(favouritesManager);
+
+  // Tree view (list mode)
+  const treeProvider = new ScriptTreeProvider(
+    context.extensionPath,
+    favouritesManager,
+  );
 
   const treeView = vscode.window.createTreeView("betterScripts", {
     treeDataProvider: treeProvider,
@@ -27,12 +40,52 @@ export async function activate(
   });
   context.subscriptions.push(treeView);
 
-  await treeProvider.refresh();
+  // Webview (tabs mode)
+  const webviewProvider = new ScriptWebviewProvider(
+    context.extensionUri,
+    favouritesManager,
+  );
 
-  const debouncedRefresh = debounce(() => treeProvider.refresh(), 300);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      "betterScriptsTabs",
+      webviewProvider,
+    ),
+  );
+
+  // Initial data load
+  await treeProvider.refresh();
+  await webviewProvider.refresh();
+
+  // File watcher
+  const debouncedRefresh = debounce(() => {
+    treeProvider.refresh();
+    webviewProvider.refresh();
+  }, 300);
   const watcher = createPackageJsonWatcher(() => debouncedRefresh());
   context.subscriptions.push(watcher);
 
+  // Favourites change → refresh both views
+  context.subscriptions.push(
+    favouritesManager.onDidChange(() => {
+      treeProvider.refresh();
+      webviewProvider.refresh();
+    }),
+  );
+
+  // Config change → refresh both views
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration("betterScripts.viewMode")) {
+        treeProvider.refresh();
+        webviewProvider.refresh();
+      }
+    }),
+  );
+
+  // --- Commands ---
+
+  // Tree view commands (receive ScriptTreeItem instances)
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "betterScripts.runScript",
@@ -77,10 +130,70 @@ export async function activate(
     ),
   );
 
+  // Webview commands (receive plain ScriptEntry objects)
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.runScriptEntry",
+      (entry: ScriptEntry) => {
+        runScriptEntry(entry);
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.debugScriptEntry",
+      (entry: ScriptEntry) => {
+        debugScriptEntry(entry);
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.openScriptEntry",
+      (entry: ScriptEntry) => {
+        openScriptEntryInPackageJson(entry);
+      },
+    ),
+  );
+
+  // Shared commands
   context.subscriptions.push(
     vscode.commands.registerCommand("betterScripts.refresh", () => {
       treeProvider.refresh();
+      webviewProvider.refresh();
     }),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.toggleFavourite",
+      (item: ScriptTreeItem) => {
+        if (item instanceof ScriptTreeItem) {
+          const key = compositeKey(
+            item.script.relativePath,
+            item.script.name,
+          );
+          favouritesManager.toggleFavourite(key);
+        }
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.removeFavourite",
+      (item: ScriptTreeItem) => {
+        if (item instanceof ScriptTreeItem) {
+          const key = compositeKey(
+            item.script.relativePath,
+            item.script.name,
+          );
+          favouritesManager.toggleFavourite(key);
+        }
+      },
+    ),
   );
 }
 

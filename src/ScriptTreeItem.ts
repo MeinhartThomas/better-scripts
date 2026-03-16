@@ -42,14 +42,23 @@ export class PackageJsonTreeItem extends vscode.TreeItem {
   }
 }
 
+export class FavouritesGroupTreeItem extends vscode.TreeItem {
+  constructor() {
+    super("Favourites", vscode.TreeItemCollapsibleState.Expanded);
+    this.contextValue = "favouritesGroup";
+    this.iconPath = new vscode.ThemeIcon("star-full");
+  }
+}
+
 export class ScriptTreeItem extends vscode.TreeItem {
   constructor(
     public readonly script: ScriptEntry,
     extensionPath: string,
+    isFavourite?: boolean,
   ) {
     super(script.name, vscode.TreeItemCollapsibleState.None);
 
-    this.contextValue = "script";
+    this.contextValue = isFavourite ? "scriptFavourite" : "script";
     this.tooltip = `${script.packageManager} run ${script.name}\n${script.command}`;
     this.description = script.command;
 

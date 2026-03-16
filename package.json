@@ -37,6 +37,19 @@
             "Always create a new terminal"
           ],
           "description": "Controls whether to reuse an existing terminal or create a new one when running scripts."
+        },
+        "betterScripts.viewMode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "tabs"
+          ],
+          "default": "list",
+          "enumDescriptions": [
+            "Show all package.json files stacked in a single list",
+            "Show a tab selector to switch between individual package.json files"
+          ],
+          "description": "Controls how multiple package.json files are displayed."
         }
       }
     },
@@ -44,7 +57,14 @@
       "explorer": [
         {
           "id": "betterScripts",
-          "name": "Better Scripts"
+          "name": "Better Scripts",
+          "when": "config.betterScripts.viewMode != tabs"
+        },
+        {
+          "id": "betterScriptsTabs",
+          "name": "Better Scripts",
+          "type": "webview",
+          "when": "config.betterScripts.viewMode == tabs"
         }
       ]
     },
@@ -73,6 +93,16 @@
         "command": "betterScripts.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "betterScripts.toggleFavourite",
+        "title": "Toggle Favourite",
+        "icon": "$(star-empty)"
+      },
+      {
+        "command": "betterScripts.removeFavourite",
+        "title": "Remove Favourite",
+        "icon": "$(star-full)"
       }
     ],
     "menus": {
@@ -84,19 +114,29 @@
         },
         {
           "command": "betterScripts.openScript",
-          "when": "viewItem == script",
+          "when": "viewItem == script || viewItem == scriptFavourite",
           "group": "inline@1"
         },
         {
           "command": "betterScripts.debugScript",
-          "when": "viewItem == script",
+          "when": "viewItem == script || viewItem == scriptFavourite",
           "group": "inline@2"
+        },
+        {
+          "command": "betterScripts.toggleFavourite",
+          "when": "viewItem == script",
+          "group": "inline@3"
+        },
+        {
+          "command": "betterScripts.removeFavourite",
+          "when": "viewItem == scriptFavourite",
+          "group": "inline@3"
         }
       ],
       "view/title": [
         {
           "command": "betterScripts.refresh",
-          "when": "view == betterScripts",
+          "when": "view == betterScripts || view == betterScriptsTabs",
           "group": "navigation"
         }
       ]

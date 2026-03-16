@@ -120,3 +120,10 @@ export enum TextEditorRevealType {
   InCenterIfOutsideViewport = 2,
   AtTop = 3,
 }
+
+export class ThemeIcon {
+  constructor(
+    public readonly id: string,
+    public readonly color?: any,
+  ) {}
+}
