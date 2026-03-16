@@ -1,6 +1,6 @@
 # Better Scripts
 
-<img src="./icons/extension-icon.png" height="96" width="96" />
+<img src="https://raw.githubusercontent.com/MeinhartThomas/better-scripts/main/icons/extension-icon.png" height="96" width="96" />
 
 A VS Code extension that replaces the built-in npm scripts sidebar with a richer, more capable alternative.
 
@@ -16,11 +16,11 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 - **Favourites** -- star frequently used scripts to pin them in a dedicated Favourites tab for quick access.
 - **Two view modes** -- choose between a classic **list** view or a **tabs** view that lets you switch between individual `package.json` files. Set via `betterScripts.viewMode`.
 
-<img src="./screenshot/screenshot.png" width="500" />
+<img src="https://raw.githubusercontent.com/MeinhartThomas/better-scripts/main/screenshot/screenshot.png" width="500" />
 
 ### Tabs View with Favourites
 
-<img src="./screenshot/screenshot2.png" width="500" />
+<img src="https://raw.githubusercontent.com/MeinhartThomas/better-scripts/main/screenshot/screenshot2.png" width="500" />
 
 ## Package Manager Detection
 
