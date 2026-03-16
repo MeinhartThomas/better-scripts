@@ -20,7 +20,7 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 
 ### Tabs View with Favourites
 
-<img src="https://raw.githubusercontent.com/MeinhartThomas/better-scripts/main/screenshot/screenshot2.png" width="500" />
+<img src="https://raw.githubusercontent.com/MeinhartThomas/better-scripts/main/screenshot/screenshot-tabs.png" width="500" />
 
 ## Package Manager Detection
 
