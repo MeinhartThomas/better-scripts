@@ -13,8 +13,14 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 - **Contextual icons** -- each script gets an icon based on what it does: test, build, lint, format, Docker, Prisma, Playwright, i18n, deploy, TypeScript, Storybook, and more. Falls back to your package manager's icon.
 - **Multi-root support** -- automatically discovers and groups scripts from every `package.json` in your workspace (excluding `node_modules`).
 - **Live updates** -- the tree refreshes automatically when any `package.json` changes.
+- **Favourites** -- star frequently used scripts to pin them in a dedicated Favourites tab for quick access.
+- **Two view modes** -- choose between a classic **list** view or a **tabs** view that lets you switch between individual `package.json` files. Set via `betterScripts.viewMode`.
 
 <img src="./screenshot/screenshot.png" width="500" />
+
+### Tabs View with Favourites
+
+<img src="./screenshot/screenshot2.png" width="500" />
 
 ## Package Manager Detection
 

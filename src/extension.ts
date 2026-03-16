@@ -50,6 +50,7 @@ export async function activate(
     vscode.window.registerWebviewViewProvider(
       "betterScriptsTabs",
       webviewProvider,
+      { webviewOptions: { retainContextWhenHidden: true } },
     ),
   );
 
@@ -171,10 +172,7 @@ export async function activate(
       "betterScripts.toggleFavourite",
       (item: ScriptTreeItem) => {
         if (item instanceof ScriptTreeItem) {
-          const key = compositeKey(
-            item.script.relativePath,
-            item.script.name,
-          );
+          const key = compositeKey(item.script.relativePath, item.script.name);
           favouritesManager.toggleFavourite(key);
         }
       },
@@ -186,10 +184,7 @@ export async function activate(
       "betterScripts.removeFavourite",
       (item: ScriptTreeItem) => {
         if (item instanceof ScriptTreeItem) {
-          const key = compositeKey(
-            item.script.relativePath,
-            item.script.name,
-          );
+          const key = compositeKey(item.script.relativePath, item.script.name);
           favouritesManager.toggleFavourite(key);
         }
       },

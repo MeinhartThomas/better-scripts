@@ -188,7 +188,10 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
               iconUri: this.getIconWebviewUri(webview, s.name, s.command),
               relativePath: s.relativePath,
               isFavourite: true,
-              packageLabel: s.relativePath,
+              packageLabel:
+                s.relativePath === "package.json"
+                  ? "root"
+                  : s.relativePath.replace(/\/package\.json$/, ""),
             });
           }
         }
@@ -228,7 +231,8 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
 
     const isDark =
       vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark ||
-      vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.HighContrast;
+      vscode.window.activeColorTheme.kind ===
+        vscode.ColorThemeKind.HighContrast;
 
     const singleFileIcons = [
       "docker",

@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {
-  FavouritesManager,
-  compositeKey,
-} from "../FavouritesManager";
+import { FavouritesManager, compositeKey } from "../FavouritesManager";
 
 class MockMemento {
   private store = new Map<string, unknown>();
