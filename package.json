@@ -2,7 +2,7 @@
   "name": "better-scripts",
   "displayName": "Better Scripts",
   "description": "A beautiful replacement for the built-in npm scripts sidebar — supports npm, pnpm, bun, and yarn with auto-detection, rich icons, and one-click run/debug.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "MeinhartThomas",
   "license": "MIT",
   "repository": {
@@ -50,6 +50,19 @@
             "Show a tab selector to switch between individual package.json files"
           ],
           "description": "Controls how multiple package.json files are displayed."
+        },
+        "betterScripts.defaultClickAction": {
+          "type": "string",
+          "enum": [
+            "integratedTerminal",
+            "externalTerminal"
+          ],
+          "default": "integratedTerminal",
+          "enumDescriptions": [
+            "Run the script in the VS Code integrated terminal",
+            "Run the script in the external terminal (configured via terminal.external)"
+          ],
+          "description": "Controls whether clicking a script row runs it in the VS Code integrated terminal or the system external terminal."
         }
       }
     },
@@ -103,6 +116,11 @@
         "command": "betterScripts.removeFavourite",
         "title": "Remove Favourite",
         "icon": "$(star-full)"
+      },
+      {
+        "command": "betterScripts.openInExternalTerminal",
+        "title": "Run in External Terminal",
+        "icon": "$(terminal)"
       }
     ],
     "menus": {
@@ -123,14 +141,19 @@
           "group": "inline@2"
         },
         {
+          "command": "betterScripts.openInExternalTerminal",
+          "when": "viewItem == script || viewItem == scriptFavourite",
+          "group": "inline@3"
+        },
+        {
           "command": "betterScripts.toggleFavourite",
           "when": "viewItem == script",
-          "group": "inline@3"
+          "group": "inline@4"
         },
         {
           "command": "betterScripts.removeFavourite",
           "when": "viewItem == scriptFavourite",
-          "group": "inline@3"
+          "group": "inline@4"
         }
       ],
       "view/title": [

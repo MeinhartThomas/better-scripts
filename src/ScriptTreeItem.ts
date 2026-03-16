@@ -65,7 +65,7 @@ export class ScriptTreeItem extends vscode.TreeItem {
     this.iconPath = getIconPath(extensionPath, script.name, script.command);
 
     this.command = {
-      command: "betterScripts.runScript",
+      command: "betterScripts.runScriptDefault",
       title: "Run Script",
       arguments: [this],
     };

@@ -1,5 +1,8 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import * as os from "os";
+import * as fs from "fs";
+import * as cp from "child_process";
 import type { ScriptTreeItem } from "./ScriptTreeItem";
 import type { ScriptEntry } from "./packageJsonParser";
 
@@ -127,6 +130,95 @@ export async function openScriptEntryInPackageJson(
   editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
 }
 
+export function openInExternalTerminalEntry(entry: ScriptEntry): void {
+  const cwd = path.dirname(entry.packageJsonUri.fsPath);
+  const cmd = `${entry.packageManager} run ${entry.name}`;
+
+  if (process.platform === "darwin") {
+    const osxExec = vscode.workspace
+      .getConfiguration("terminal.external")
+      .get<string>("osxExec", "Terminal.app");
+    const osxExecLower = osxExec.toLowerCase();
+
+    if (osxExecLower.includes("iterm")) {
+      const osaScript = [
+        'tell application "iTerm2"',
+        "  activate",
+        "  if (count windows) = 0 then",
+        "    create window with default profile",
+        "  end if",
+        "  tell current window",
+        "    create tab with default profile",
+        "    tell current session",
+        `      write text "cd ${applescriptShellEscape(cwd)} && ${applescriptEscape(cmd)}"`,
+        "    end tell",
+        "  end tell",
+        "end tell",
+      ].join("\n");
+      cp.spawn("osascript", ["-e", osaScript], { detached: true });
+    } else if (osxExecLower.includes("warp")) {
+      // Warp doesn't support AppleScript or command args via its URL scheme,
+      // but it can execute .command files opened with `open -a`
+      const tmpFile = path.join(
+        os.tmpdir(),
+        `better-scripts-${Date.now()}.command`,
+      );
+      const script = [
+        "#!/bin/bash",
+        `cd ${shellQuote(cwd)}`,
+        "clear",
+        cmd,
+        `rm -f ${shellQuote(tmpFile)}`,
+        "exec $SHELL",
+      ].join("\n");
+      fs.writeFileSync(tmpFile, script, { mode: 0o755 });
+      cp.spawn("open", ["-a", osxExec, tmpFile], { detached: true });
+    } else {
+      // Terminal.app and other AppleScript-compatible terminals
+      const appName = path.basename(osxExec, ".app");
+      const shellCmd = `cd ${shellQuote(cwd)} && ${cmd}`;
+      const osaScript = [
+        `tell application "${applescriptEscape(appName)}"`,
+        `  do script "${applescriptEscape(shellCmd)}"`,
+        "  activate",
+        "end tell",
+      ].join("\n");
+      cp.spawn("osascript", ["-e", osaScript], { detached: true });
+    }
+  } else if (process.platform === "win32") {
+    const winExec = vscode.workspace
+      .getConfiguration("terminal.external")
+      .get<string>("windowsExec", "cmd");
+    cp.spawn(winExec, ["/k", `cd /d "${cwd}" && ${cmd}`], {
+      detached: true,
+      shell: true,
+    });
+  } else {
+    const linuxExec = vscode.workspace
+      .getConfiguration("terminal.external")
+      .get<string>("linuxExec", "xterm");
+    cp.spawn(
+      linuxExec,
+      ["-e", `bash -c "cd ${shellQuote(cwd)} && ${cmd}; exec bash"`],
+      {
+        detached: true,
+      },
+    );
+  }
+}
+
+function shellQuote(str: string): string {
+  return `'${str.replace(/'/g, "'\\''")}'`;
+}
+
+function applescriptEscape(str: string): string {
+  return str.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function applescriptShellEscape(str: string): string {
+  return applescriptEscape(shellQuote(str));
+}
+
 // --- Tree item wrappers ---
 
 export function runScript(item: ScriptTreeItem): void {
@@ -141,6 +233,10 @@ export async function openScriptInPackageJson(
   item: ScriptTreeItem,
 ): Promise<void> {
   await openScriptEntryInPackageJson(item.script);
+}
+
+export function openInExternalTerminal(item: ScriptTreeItem): void {
+  openInExternalTerminalEntry(item.script);
 }
 
 function escapeRegex(str: string): string {

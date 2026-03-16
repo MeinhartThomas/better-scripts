@@ -7,6 +7,8 @@ import {
   runScript,
   debugScript,
   openScriptInPackageJson,
+  openInExternalTerminal,
+  openInExternalTerminalEntry,
   runScriptEntry,
   debugScriptEntry,
   openScriptEntryInPackageJson,
@@ -115,6 +117,35 @@ export async function activate(
       (item: ScriptTreeItem) => {
         if (item instanceof ScriptTreeItem) {
           openScriptInPackageJson(item);
+        }
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.openInExternalTerminal",
+      (item: ScriptTreeItem) => {
+        if (item instanceof ScriptTreeItem) {
+          openInExternalTerminal(item);
+        }
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "betterScripts.runScriptDefault",
+      (item: ScriptTreeItem) => {
+        if (item instanceof ScriptTreeItem) {
+          const action = vscode.workspace
+            .getConfiguration("betterScripts")
+            .get<string>("defaultClickAction", "integratedTerminal");
+          if (action === "externalTerminal") {
+            openInExternalTerminalEntry(item.script);
+          } else {
+            runScriptEntry(item.script);
+          }
         }
       },
     ),
