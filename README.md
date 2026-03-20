@@ -24,10 +24,10 @@ A VS Code extension that replaces the built-in npm scripts sidebar with a richer
 
 ## Settings
 
-| Setting | Options | Default | Description |
-|---------|---------|---------|-------------|
-| `betterScripts.viewMode` | `list`, `tabs` | `tabs` | Controls how multiple `package.json` files are displayed. |
-| `betterScripts.terminalBehavior` | `reuse`, `newTerminal` | `reuse` | Controls whether to reuse an existing terminal or create a new one when running scripts. |
+| Setting                            | Options                                  | Default              | Description                                                                                                    |
+| ---------------------------------- | ---------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `betterScripts.viewMode`           | `list`, `tabs`                           | `tabs`               | Controls how multiple `package.json` files are displayed.                                                      |
+| `betterScripts.terminalBehavior`   | `reuse`, `newTerminal`                   | `reuse`              | Controls whether to reuse an existing terminal or create a new one when running scripts.                       |
 | `betterScripts.defaultClickAction` | `integratedTerminal`, `externalTerminal` | `integratedTerminal` | Controls whether clicking a script runs it in the VS Code integrated terminal or the system external terminal. |
 
 ## Package Manager Detection

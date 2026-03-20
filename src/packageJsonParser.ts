@@ -70,9 +70,15 @@ export async function parsePackageJson(
 function getRelativePath(uri: vscode.Uri): string {
   const folder = vscode.workspace.getWorkspaceFolder(uri);
   if (folder) {
-    return vscode.workspace.asRelativePath(uri, false);
+    return vscode.workspace.asRelativePath(uri, true);
   }
   return uri.fsPath;
+}
+
+export function getPackageLabel(relativePath: string): string {
+  return relativePath === "package.json"
+    ? "root"
+    : relativePath.replace(/\/package\.json$/, "");
 }
 
 export function createPackageJsonWatcher(

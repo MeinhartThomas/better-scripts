@@ -2,7 +2,7 @@
   "name": "better-scripts",
   "displayName": "Better Scripts",
   "description": "A beautiful replacement for the built-in npm scripts sidebar — supports npm, pnpm, bun, and yarn with auto-detection, rich icons, and one-click run/debug.",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "publisher": "MeinhartThomas",
   "license": "MIT",
   "repository": {

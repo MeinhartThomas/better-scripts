@@ -165,11 +165,10 @@ export function openInExternalTerminalEntry(entry: ScriptEntry): void {
       );
       const script = [
         "#!/bin/bash",
+        `trap ${shellQuote("rm -f " + tmpFile + "; cd " + shellQuote(cwd) + " && exec $SHELL")} EXIT`,
         `cd ${shellQuote(cwd)}`,
         "clear",
         cmd,
-        `rm -f ${shellQuote(tmpFile)}`,
-        "exec $SHELL",
       ].join("\n");
       fs.writeFileSync(tmpFile, script, { mode: 0o755 });
       cp.spawn("open", ["-a", osxExec, tmpFile], { detached: true });

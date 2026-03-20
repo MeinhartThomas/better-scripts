@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import {
   findAllPackageJsons,
+  getPackageLabel,
   type PackageJsonEntry,
   type ScriptEntry,
 } from "./packageJsonParser";
@@ -180,12 +181,8 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
     }
 
     for (const entry of this.packageJsonEntries) {
-      const label =
-        entry.relativePath === "package.json"
-          ? "root"
-          : entry.relativePath.replace(/\/package\.json$/, "");
       tabs.push({
-        label,
+        label: getPackageLabel(entry.relativePath),
         isFavourites: false,
         relativePath: entry.relativePath,
       });
@@ -217,10 +214,7 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
               iconUri: this.getIconWebviewUri(webview, s.name, s.command),
               relativePath: s.relativePath,
               isFavourite: true,
-              packageLabel:
-                s.relativePath === "package.json"
-                  ? "root"
-                  : s.relativePath.replace(/\/package\.json$/, ""),
+              packageLabel: getPackageLabel(s.relativePath),
             });
           }
         }

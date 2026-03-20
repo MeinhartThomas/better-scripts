@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as vscode from "vscode";
-import type { ScriptEntry } from "./packageJsonParser";
+import { getPackageLabel, type ScriptEntry } from "./packageJsonParser";
 import type { PackageManager } from "./packageManagerDetector";
 import { getIconPath } from "./iconResolver";
 
@@ -11,7 +11,10 @@ export class PackageJsonTreeItem extends vscode.TreeItem {
     packageManager: PackageManager,
     extensionPath: string,
   ) {
-    super(relativePath, vscode.TreeItemCollapsibleState.Expanded);
+    super(
+      getPackageLabel(relativePath),
+      vscode.TreeItemCollapsibleState.Expanded,
+    );
     this.contextValue = "packageJson";
 
     const pmIconName =
