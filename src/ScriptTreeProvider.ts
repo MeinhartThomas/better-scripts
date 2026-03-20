@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import {
   findAllPackageJsons,
+  buildPackageLabelMap,
   type PackageJsonEntry,
 } from "./packageJsonParser";
 import {
@@ -24,6 +25,7 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
   private packageJsonEntries: PackageJsonEntry[] = [];
   private extensionPath: string;
   private activeTabIndex = 0;
+  private labelMap: Map<string, string> = new Map();
 
   constructor(
     extensionPath: string,
@@ -34,6 +36,9 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
 
   async refresh(): Promise<void> {
     this.packageJsonEntries = await findAllPackageJsons();
+    this.labelMap = buildPackageLabelMap(
+      this.packageJsonEntries.map((e) => e.relativePath),
+    );
     if (this.activeTabIndex >= this.packageJsonEntries.length) {
       this.activeTabIndex = 0;
     }
@@ -96,6 +101,7 @@ export class ScriptTreeProvider implements vscode.TreeDataProvider<TreeElement> 
               entry.uri,
               entry.packageManager,
               this.extensionPath,
+              this.labelMap.get(entry.relativePath),
             ),
           );
         }

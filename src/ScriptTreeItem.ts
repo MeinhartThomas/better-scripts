@@ -10,9 +10,10 @@ export class PackageJsonTreeItem extends vscode.TreeItem {
     public readonly packageJsonUri: vscode.Uri,
     packageManager: PackageManager,
     extensionPath: string,
+    label?: string,
   ) {
     super(
-      getPackageLabel(relativePath),
+      label ?? getPackageLabel(relativePath),
       vscode.TreeItemCollapsibleState.Expanded,
     );
     this.contextValue = "packageJson";

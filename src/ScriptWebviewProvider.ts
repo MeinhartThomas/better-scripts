@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import {
   findAllPackageJsons,
+  buildPackageLabelMap,
   getPackageLabel,
   type PackageJsonEntry,
   type ScriptEntry,
@@ -47,6 +48,7 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView;
   private packageJsonEntries: PackageJsonEntry[] = [];
   private activeTabIndex = 0;
+  private labelMap: Map<string, string> = new Map();
 
   constructor(
     private extensionUri: vscode.Uri,
@@ -55,6 +57,9 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
 
   async refresh(): Promise<void> {
     this.packageJsonEntries = await findAllPackageJsons();
+    this.labelMap = buildPackageLabelMap(
+      this.packageJsonEntries.map((e) => e.relativePath),
+    );
     if (this.activeTabIndex >= this.packageJsonEntries.length) {
       this.activeTabIndex = 0;
     }
@@ -182,7 +187,9 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
 
     for (const entry of this.packageJsonEntries) {
       tabs.push({
-        label: getPackageLabel(entry.relativePath),
+        label:
+          this.labelMap.get(entry.relativePath) ??
+          getPackageLabel(entry.relativePath),
         isFavourites: false,
         relativePath: entry.relativePath,
       });
@@ -214,7 +221,9 @@ export class ScriptWebviewProvider implements vscode.WebviewViewProvider {
               iconUri: this.getIconWebviewUri(webview, s.name, s.command),
               relativePath: s.relativePath,
               isFavourite: true,
-              packageLabel: getPackageLabel(s.relativePath),
+              packageLabel:
+                this.labelMap.get(s.relativePath) ??
+                getPackageLabel(s.relativePath),
             });
           }
         }
