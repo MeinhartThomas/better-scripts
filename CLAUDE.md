@@ -4,54 +4,50 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Better Scripts** is a VS Code extension that replaces the built-in npm scripts sidebar with a richer interface supporting npm, pnpm, bun, and yarn. It provides dual view modes (tree view and webview tabs), favourites, and cross-platform external terminal support.
+Better Scripts is a VS Code extension that replaces the built-in npm scripts sidebar with richer features: auto-detection of npm/pnpm/bun/yarn, contextual icons, favourites, and one-click run/debug. Published as `MeinhartThomas.better-scripts`.
 
 ## Commands
 
 ```bash
-bun install              # Install dependencies
-bun run dev              # Watch mode development (esbuild with sourcemaps)
-bun run build            # Production build (esbuild, minified)
-bun run test             # Run tests (vitest)
-bun run lint             # Type-check only (tsc --noEmit)
-bun run format           # Format code (prettier)
-bun run format:check     # Check formatting
-bun run install:vscode   # Build, package, and install to VS Code
-bun run install:cursor   # Build, package, and install to Cursor
+npm run dev          # Watch mode with source maps (esbuild)
+npm run build        # Production build (esbuild, minified)
+npm run package      # Build + vsce package to .vsix
+npm run test         # Run all tests (vitest)
+npx vitest run src/test/iconResolver.test.ts  # Run a single test file
+npm run lint         # Type-check only (tsc --noEmit)
+npm run format:check # Prettier check
+npm run format       # Prettier fix
+npm run install:vscode  # Package and install into VS Code
+npm run install:cursor  # Package and install into Cursor
 ```
 
 ## Architecture
 
-This is a VS Code WebView Extension with two rendering modes sharing core logic:
+The extension activates on `workspaceContains:**/package.json` and offers two UI modes controlled by the `betterScripts.viewMode` setting:
 
-- **List mode**: `ScriptTreeProvider` implements `TreeDataProvider` for a native tree view
-- **Tabs mode**: `ScriptWebviewProvider` generates inline HTML/CSS/JS webview with tab switching
+- **Tree view** (`ScriptTreeProvider.ts`) — standard VS Code TreeDataProvider, flat or grouped list
+- **Webview tabs** (`ScriptWebviewProvider.ts`) — custom HTML tabs UI with inline SVG icons and VS Code theme integration
 
-Both modes use the same shared modules:
+Both views consume the same data pipeline:
 
-- **`scriptRunner.ts`** — Terminal management (reuse/create), debug launch, external terminal execution with platform-specific paths (macOS AppleScript, Windows CMD, Linux xterm)
-- **`packageJsonParser.ts`** — Discovers all workspace `package.json` files (excluding `node_modules`), parses scripts, creates file watchers
-- **`packageManagerDetector.ts`** — Lockfile-based detection walking up the directory tree: `bun.lockb` → `bun.lock` → `pnpm-lock.yaml` → `yarn.lock` → `package-lock.json` → `packageManager` field → npm default
-- **`iconResolver.ts`** — Pattern-matches script names/commands to 30+ icon types with light/dark variants
-- **`FavouritesManager.ts`** — Persistent favourites via VS Code workspace state using composite keys (`${relativePath}::${scriptName}`)
+1. **`packageJsonParser.ts`** discovers all `package.json` files (excluding `node_modules`), parses scripts, and builds display labels with collision detection (`buildPackageLabelMap`).
+2. **`packageManagerDetector.ts`** walks up from each `package.json` checking lockfiles (bun → pnpm → yarn → npm) and the `packageManager` field.
+3. **`iconResolver.ts`** maps script names/commands to icons via 32+ priority-ordered rules with dark/light theme variants.
+4. **`FavouritesManager.ts`** persists favourites to workspace state using `relativePath::scriptName` composite keys, with EventEmitter for reactive updates.
+5. **`scriptRunner.ts`** handles terminal creation/reuse, debug configuration for all 4 package managers, and external terminal support (platform-specific: macOS iTerm/Warp/Terminal.app, Windows, Linux).
 
-Entry point is `extension.ts` which registers commands, sets up file watchers, and initializes both view providers with a 300ms debounced refresh.
+`extension.ts` wires everything together: registers commands (10 total), sets up a debounced file watcher (300ms), and manages the lifecycle.
 
-## Build & Output
+## Key Data Types
 
-- esbuild bundles `src/extension.ts` → `dist/extension.js` (CJS, Node platform, `vscode` externalized)
-- `.vsix` packages are created via `@vscode/vsce` with `--no-dependencies`
-- No production dependencies — only VS Code API at runtime
+- **`ScriptEntry`**: `{ name, command, packageJsonUri, relativePath, packageManager }`
+- **`PackageJsonEntry`**: `{ uri, relativePath, scripts: ScriptEntry[], packageManager }`
+- **`PackageManager`**: `"bun" | "pnpm" | "yarn" | "npm"`
 
 ## Testing
 
-- Vitest with a full VS Code API mock at `src/test/__mocks__/vscode.ts`
-- Mock is wired via path alias in `vitest.config.ts` so imports of `vscode` resolve to the mock
-- Tests cover pure business logic (FavouritesManager, iconResolver) — no integration tests with VS Code runtime
+Tests use Vitest with a complete VS Code API mock at `src/test/__mocks__/vscode.ts`. The `vitest.config.ts` aliases the `vscode` module to this mock. Three test suites cover: FavouritesManager (persistence, events), iconResolver (rule matching, priority), packageJsonParser (label generation, collisions).
 
 ## Code Style
 
-- TypeScript strict mode
-- Prettier: double quotes, semicolons, trailing commas, 80-char width
-- Target: ES2022, CommonJS modules
-- Webview uses nonce-based CSP and HTML-escapes user content
+Prettier config: semicolons, double quotes, trailing commas, 80 char width, 2-space indent. No ESLint — linting is type-checking only via `tsc --noEmit`.
